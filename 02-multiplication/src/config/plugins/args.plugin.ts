@@ -1,4 +1,4 @@
-import yargs from 'yargs';
+import yargs, { options } from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
 export const yarg = yargs(hideBin(process.argv))
@@ -19,6 +19,18 @@ export const yarg = yargs(hideBin(process.argv))
         type: 'boolean',
         default: false,
         describe: 'Muestra la tabla en consola',
+    })
+    .option('n',{
+        alias:"name",
+        type:"string",
+        default: "table",
+        describe: "File name"
+    })
+    .option('d',{
+        alias:"destination",
+        type:"string",
+        default: "./outputs",
+        describe: "File destination"
     })
     .check((argv, options) => {
         if (argv.b < 1) throw 'Error: la base debe ser un número mayor a 0';
