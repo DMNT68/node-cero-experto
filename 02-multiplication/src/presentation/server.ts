@@ -1,4 +1,5 @@
-import { CreateTable } from "../domain/use-cases/create-table.use-case";
+import { CreateTable } from '../domain/use-cases/create-table.use-case';
+import { SaveFile } from '../domain/use-cases/save-file.use.case';
 
 interface RunOptions {
     base: number;
@@ -9,9 +10,15 @@ interface RunOptions {
 export class ServerApp {
     constructor() {}
 
-    static run({base , limit, showTable}: RunOptions) {
+    static run({ base, limit, showTable }: RunOptions) {
         console.log('Server running...');
         const table = new CreateTable().excute({ base, limit });
+        const fileCreated = new SaveFile().execute({
+            fileContent: table,
+            fileName: `tabla-${base}`,
+            fileDestination: `outputs/table-${base}`,
+        });
         if (showTable) console.log(table);
+        fileCreated ? console.log('Archivo creado') : console.log('Error al crear el archivo');
     }
 }
