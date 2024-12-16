@@ -45,4 +45,29 @@ describe('SaveFileUseCase', () => {
         expect(fileExists).toBe(true);
         expect(fileContent).toBe('custom content');
     });
+
+    test('should return false if directory cannot be created', () => {
+        const saveFile = new SaveFile();
+        const mkdirSpy = jest.spyOn(fs, 'mkdirSync').mockImplementation(() => {
+            throw new Error('This is a custom error message from testing');
+        });
+
+        const result = saveFile.execute(customOptions);
+
+        expect(result).toBe(false);
+        mkdirSpy.mockRestore();
+    });
+
+    test('should return false if file could not be created', () => {
+        const saveFile = new SaveFile();
+        const mkdirSpy = jest.spyOn(fs, 'writeFileSync').mockImplementation(() => {
+            throw new Error('This is a custom writing error message');
+        });
+
+        const result = saveFile.execute({ fileContent: 'hola' });
+
+        expect(result).toBe(false);
+
+        mkdirSpy.mockRestore();
+    });
 });
